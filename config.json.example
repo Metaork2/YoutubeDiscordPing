@@ -1,0 +1,20 @@
+{
+	"discord":{
+
+		"api":
+			{
+				"base": "https://discord.com/api/v10",
+				"auth": "Bot", //Must be Bot or Bearer
+				"token" : "<BOT OAUTH TOKEN - DO NOT SHARE - TREAT THIS AS A PASSWORD>"
+			},
+		"channelid": "<discord channel unique ID - right click channel and copy from discord>",
+		"clientid": "<Discord application client ID>",
+		"scopes": "18496" //Dont change this unless you absolutely have to
+	},
+	"settings":{
+
+		"YoutubeChannelId": ["UCZQ7nZ8Lc7pslBN0gN1Jg0w", "UCUPvh0c8NDu3vSShiyoOVPA"],
+		"YoutubeAPIKey": "<API KEY>" //Google API key with YoutubeDataV3 access
+
+	}
+}
