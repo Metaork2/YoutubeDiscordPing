@@ -8,12 +8,14 @@
 				"token" : "<BOT OAUTH TOKEN - DO NOT SHARE - TREAT THIS AS A PASSWORD>"
 			},
 		"channelid": "<discord channel unique ID - right click channel and copy from discord>",
+		"pingroles": ["1188589082826252329"], // Role ID of roles to be pinged 
 		"clientid": "<Discord application client ID>",
 		"scopes": "18496" //Dont change this unless you absolutely have to
 	},
 	"settings":{
 
-		"YoutubeChannelId": ["UCZQ7nZ8Lc7pslBN0gN1Jg0w", "UCUPvh0c8NDu3vSShiyoOVPA"],
+		"YoutubeChannelId": ["UCZQ7nZ8Lc7pslBN0gN1Jg0w", "UCUPvh0c8NDu3vSShiyoOVPA"], //Bao the whale and Bao Moments
+		"channelContentFilter": {"UCZQ7nZ8Lc7pslBN0gN1Jg0w": "FullLength","UCUPvh0c8NDu3vSShiyoOVPA":"all" },//Full Length for Bao the Whale, all for Bao Moments
 		"YoutubeAPIKey": "<API KEY>" //Google API key with YoutubeDataV3 access
 
 	}
