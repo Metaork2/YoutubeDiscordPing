@@ -10,6 +10,7 @@
 		"channelid": "<discord channel unique ID - right click channel and copy from discord>",
 		"pingroles": ["1188589082826252329"], // Role ID of roles to be pinged 
 		"clientid": "<Discord application client ID>",
+		"pingEveryone": true,
 		"scopes": "18496" //Dont change this unless you absolutely have to
 	},
 	"settings":{

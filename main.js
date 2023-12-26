@@ -39,19 +39,14 @@ inputs: Array of Video Objectss
 Outputs:NULL
 */
 async function createDiscordPing(videos){
-    console.log(videos);
     for (i=0;i<videos.length;i++){
         videoObject = videos[i];
         console.log(videoObject);
-        //ToDo: Per channel filtering (i.e shorts only or not, ignore vidoes without tags)
-
         if (settings.channelContentFilter[videoObject.channelId] !== "all"){
             if (settings.channelContentFilter[videoObject.channelId] !== videoObject.contentType){
                 return;
             }
         }
-
-
         //Bot requires no rich presence, ability to read or respond to messages - therefore discord's basic HTTP api can be used to simplify app
         var $embed = [
                 {
@@ -84,8 +79,12 @@ async function createDiscordPing(videos){
                 "url": `https://youtube.com/watch?v=${videoObject.videoId}`
                 }
             ]
-        var $textMessage = `@everyone Check out the latest YouTube video from ${videoObject.channelName}`
-        
+            $pings ="";
+            if (discord.pingEveryone){$pings += "@everyone"}
+            discord.pingroles.foreach(e=>{
+                $pings += `<@${e}>`
+            })
+        var $textMessage = `${pings} Check out the latest YouTube video from ${videoObject.channelName}`
         //POST {$discord.api.base}/channels/{$discord.channelid}/messages
         var $req = (`${discord.api.base}/channels/${discord.channelid}/messages`);
         var $opts = {
@@ -94,10 +93,7 @@ async function createDiscordPing(videos){
             'body': JSON.stringify({
                 'content': $textMessage,
                 'tts': false,
-                'embeds': $embed,
-                'allowed_mentions': {
-                    "parse":["everyone"]
-                }
+                'embeds': $embed
             })
         }
         response = await fetch($req,$opts)
