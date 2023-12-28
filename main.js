@@ -12,6 +12,7 @@ var LatestVideoId = [];
 var channelIcon = [];
 var uploadsPlaylist = [];
 var state = "starting";
+var firstrun = true;
 
 
 //Initialization - Grab channel icons of configured channels    
@@ -81,10 +82,10 @@ async function createDiscordPing(videos){
             ]
             $pings ="";
             if (discord.pingEveryone){$pings += "@everyone"}
-            discord.pingroles.foreach(e=>{
-                $pings += `<@${e}>`
-            })
-        var $textMessage = `${pings} Check out the latest YouTube video from ${videoObject.channelName}`
+            for (j=0;j<discord.pingroles.length;j++){
+                $pings += `<@&${discord.pingroles[j]}>`
+            }
+        var $textMessage = `${$pings} Check out the latest YouTube video from ${videoObject.channelName}`
         //POST {$discord.api.base}/channels/{$discord.channelid}/messages
         var $req = (`${discord.api.base}/channels/${discord.channelid}/messages`);
         var $opts = {
@@ -129,10 +130,15 @@ function interp(a){
             output.push(thisOutput);
         })
     }
-
-    createDiscordPing(output);
-    console.log("Latest Video ID's: "+LatestVideoId)
-    state = "ready"
+    if (firstrun==true){ //Dont ping on first run
+        firstrun = false;
+        state = "ready"
+        return;
+    }else{
+        createDiscordPing(output);
+        console.log("Latest Video ID's: "+LatestVideoId)
+        state = "ready"
+    }
 }
 
 /*
@@ -201,5 +207,5 @@ function loop(){
 }
 
 initialize();
-setTimeout(loop,5000); // Run first detection after 5 seconds
+setTimeout(loop,5000); // Run first detection after 5 seconds -- this detection cycle WONT produce a ping, but grabs all currently published videos
 setInterval(loop,900000);
