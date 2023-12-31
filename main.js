@@ -81,7 +81,7 @@ async function createDiscordPing(videos){
                 }
             ]
             $pings ="";
-            if (discord.pingEveryone){$pings += "@everyone"}
+            if (discord.pingEveryone == true){$pings += "@everyone"}
             for (j=0;j<discord.pingroles.length;j++){
                 $pings += `<@&${discord.pingroles[j]}>`
             }
