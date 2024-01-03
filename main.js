@@ -12,7 +12,7 @@ var LatestVideoId = [];
 var channelIcon = [];
 var uploadsPlaylist = [];
 var state = "starting";
-var firstrun = true;
+var firstrun = 0;
 
 
 //Initialization - Grab channel icons of configured channels    
@@ -81,11 +81,11 @@ async function createDiscordPing(videos){
                 }
             ]
             $pings ="";
-            if (discord.pingEveryone){$pings += "@everyone"}
+            if (discord.pingEveryone == true){$pings += "@everyone"}
             for (j=0;j<discord.pingroles.length;j++){
                 $pings += `<@&${discord.pingroles[j]}>`
             }
-        var $textMessage = `${$pings} Check out the latest YouTube video from ${videoObject.channelName}`
+        var $textMessage = `${$pings} ${videoObject.channelName} just uploaded ${videoObject.videoTitle} at https://youtube.com/watch?v=${videoObject.videoId} ! Remember to share and like and SMASH THAT BELL to keep the channel afloat!`
         //POST {$discord.api.base}/channels/{$discord.channelid}/messages
         var $req = (`${discord.api.base}/channels/${discord.channelid}/messages`);
         var $opts = {
@@ -130,8 +130,11 @@ function interp(a){
             output.push(thisOutput);
         })
     }
-    if (firstrun==true){ //Dont ping on first run
-        firstrun = false;
+    if (firstrun<settings.YoutubeChannelId.length){ //Dont ping on first run for each channel
+		
+		firstrun++;
+		console.log(firstrun);
+		console.log(firstrun<settings.YoutubeChannelId.length)
         state = "ready"
         return;
     }else{
