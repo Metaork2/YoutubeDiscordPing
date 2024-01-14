@@ -12,7 +12,7 @@ var LatestVideoId = [];
 var channelIcon = [];
 var uploadsPlaylist = [];
 var state = "starting";
-var firstrun = true;
+var firstrun = 0;
 
 
 //Initialization - Grab channel icons of configured channels    
@@ -85,7 +85,7 @@ async function createDiscordPing(videos){
             for (j=0;j<discord.pingroles.length;j++){
                 $pings += `<@&${discord.pingroles[j]}>`
             }
-        var $textMessage = `${$pings} Check out the latest YouTube video from ${videoObject.channelName}`
+        var $textMessage = `${$pings} ${videoObject.channelName} just uploaded ${videoObject.videoTitle} at https://youtube.com/watch?v=${videoObject.videoId} ! Remember to share and like and SMASH THAT BELL to keep the channel afloat!`
         //POST {$discord.api.base}/channels/{$discord.channelid}/messages
         var $req = (`${discord.api.base}/channels/${discord.channelid}/messages`);
         var $opts = {
@@ -130,8 +130,11 @@ function interp(a){
             output.push(thisOutput);
         })
     }
-    if (firstrun==true){ //Dont ping on first run
-        firstrun = false;
+    if (firstrun<settings.YoutubeChannelId.length){ //Dont ping on first run for each channel
+		
+		firstrun++;
+		console.log(firstrun);
+		console.log(firstrun<settings.YoutubeChannelId.length)
         state = "ready"
         return;
     }else{
@@ -182,14 +185,14 @@ async function grabLatestVideos(selector){
             LatestVideoId[selector] = validVideos[0];
            videoData =  await grabVideoData(validVideos);
            await interp(videoData);
-           console.log(`Scheduling next detection run for ${new Date(Date.now()+900000).toTimeString()}`);
+           console.log(`Scheduling next detection run for ${new Date(Date.now()+(settings.scanInterval*60*1000)).toTimeString()}`);
         }else{
-            console.log(`no new videos found, scheduling next detection run for ${new Date(Date.now()+900000).toTimeString()}`);
+            console.log(`no new videos found, scheduling next detection run for ${new Date(Date.now()+(settings.scanInterval*60*1000)).toTimeString()}`);
             state = "ready"
         }
     }else{
 
-        console.log(`An Error has occurred, scheduling next detection run for ${new Date(Date.now()+900000).toTimeString()}`)
+        console.log(`An Error has occurred, scheduling next detection run for ${new Date(Date.now()+(settings.scanInterval*60*1000)).toTimeString()}`)
         json = await response.json();
         console.log(json.error.message);
     }
@@ -208,4 +211,13 @@ function loop(){
 
 initialize();
 setTimeout(loop,5000); // Run first detection after 5 seconds -- this detection cycle WONT produce a ping, but grabs all currently published videos
-setInterval(loop,900000);
+
+
+var startedAt = (new Date.now())
+
+delta = (((Math.ceil((startedAt.getMinutes())/settings.scanInterval))*settings.scanInterval)-startedAt.getMinutes());
+
+console.log(`Time Delta To Next Requested Scan ${delta}, delaying interval creation`)
+
+
+setTimeout(function(){setInterval(loop,(settings.scanInterval*60*1000))},((delta*1000)-startedAt.getSeconds()));

@@ -17,7 +17,8 @@
 
 		"YoutubeChannelId": ["UCZQ7nZ8Lc7pslBN0gN1Jg0w", "UCUPvh0c8NDu3vSShiyoOVPA"], //Bao the whale and Bao Moments
 		"channelContentFilter": {"UCZQ7nZ8Lc7pslBN0gN1Jg0w": "FullLength","UCUPvh0c8NDu3vSShiyoOVPA":"all" },//Full Length for Bao the Whale, all for Bao Moments
-		"YoutubeAPIKey": "<API KEY>" //Google API key with YoutubeDataV3 access
-
+		"YoutubeAPIKey": "<API KEY>", //Google API key with YoutubeDataV3 access
+		"scanInterval": 5, //Interval (in minutes) between each detection run (please bare in mind your API quota)
+		"scanAt": 02 //Target minute after the hour to scan at
 	}
 }
